@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const router = require("./app/routes/route");
 const adminRouter = require("./app/routes/admin.route");
+const imageRouter = require("./app/routes/image.route");
 
 /**
  * Sequelize 설정
@@ -40,6 +41,7 @@ if (process.env.NODE_ENV === "prod") {
  */
 app.use("/", router);
 app.use("/admins", adminRouter);
+app.use("/images", imageRouter);
 
 /**
  * 에러 처리 설정
