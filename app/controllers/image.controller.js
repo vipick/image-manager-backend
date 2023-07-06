@@ -4,9 +4,9 @@ const { Image } = require("../models");
  * 이미지 추가
  */
 exports.addImage = async (req, res, next) => {
-  const name = req.body.name;
-  const imageURL = req.body.imageURL;
-  const fileSize = req.body.fileSize;
+  const name = req.file.originalname;
+  const imageURL = req.file.location;
+  const fileSize = String(req.file.size);
 
   try {
     await Image.create({
@@ -37,6 +37,26 @@ exports.getImages = async (req, res, next) => {
       statusCode: 200,
       message: "이미지 리스트 가져오기 성공",
       data: { images: images },
+    });
+  } catch (err) {
+    next(`${req.method} ${req.url} : ` + err);
+  }
+};
+
+/**
+ * 이미지 삭제
+ */
+exports.deleteImage = async (req, res, next) => {
+  try {
+    const imageId = req.params.id;
+
+    await Image.destroy({
+      where: { id: imageId },
+    });
+
+    return res.status(200).send({
+      statusCode: 200,
+      message: "이미지 삭제 성공",
     });
   } catch (err) {
     next(`${req.method} ${req.url} : ` + err);

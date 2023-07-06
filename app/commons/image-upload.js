@@ -14,18 +14,23 @@ AWS.config.update({
   region: "ap-northeast-2",
 });
 
-const upload = multer({
-  storage: multerS3({
-    s3: new AWS.S3(),
-    bucket: IMAGE_BUCKET,
-    contentType: function (req, file, cb) {
-      cb(null, "image/jpeg");
-    },
-    key(req, file, cb) {
-      cb(null, `${uuid.v4()}`);
-    },
-  }),
-  limits: { fileSize: 10 * 1024 * 1024 },
-});
+let upload;
+try {
+  upload = multer({
+    storage: multerS3({
+      s3: new AWS.S3(),
+      bucket: IMAGE_BUCKET,
+      contentType: function (req, file, cb) {
+        cb(null, "image/jpg");
+      },
+      key(req, file, cb) {
+        cb(null, `${uuid.v4()}`);
+      },
+    }),
+    limits: { fileSize: 10 * 1024 * 1024 },
+  });
+} catch (err) {
+  console.log(err);
+}
 
 module.exports = upload;
