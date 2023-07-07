@@ -1,12 +1,31 @@
 const { Image } = require("../models");
 
 /**
- * 이미지 추가
+ * 이미지 업로드
  */
-exports.addImage = async (req, res, next) => {
+exports.uploadImage = async (req, res, next) => {
   const name = req.file.originalname;
   const imageURL = req.file.location;
   const fileSize = String(req.file.size);
+
+  try {
+    return res.status(201).send({
+      statusCode: 201,
+      message: "이미지 업로드 성공",
+      data: { imageURL: imageURL, name: name, fileSize: fileSize },
+    });
+  } catch (err) {
+    next(`${req.method} ${req.url} : ` + err);
+  }
+};
+
+/**
+ * 이미지 추가
+ */
+exports.addImage = async (req, res, next) => {
+  const name = req.body.name;
+  const imageURL = req.body.imageURL;
+  const fileSize = req.body.fileSize;
 
   try {
     await Image.create({
