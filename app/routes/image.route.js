@@ -3,12 +3,13 @@ const JWT_SECRET_FOR_ADMIN = process.env.JWT_SECRET_FOR_ADMIN;
 const express = require("express");
 const router = express.Router();
 const imageController = require("../controllers/image.controller.js");
-const upload = require("../commons/image-upload");
+const awsUpload = require("../commons/image-upload-aws");
+const ncloudUpload = require("../commons/image-upload-ncloud");
 
 //이미지 업로드
 router.post(
   "/upload",
-  [authJwt.verifyToken(JWT_SECRET_FOR_ADMIN), upload.single("file")],
+  [authJwt.verifyToken(JWT_SECRET_FOR_ADMIN), ncloudUpload.single("img")],
   imageController.uploadImage
 );
 

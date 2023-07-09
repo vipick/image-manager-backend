@@ -1,4 +1,5 @@
 const { Image } = require("../models");
+const uuid = require("uuid");
 
 /**
  * 이미지 업로드
